@@ -84,4 +84,4 @@ if __name__ == '__main__':
     #generating the csv file
     logger.info("Creating resources/token.csv file with day_candle_vs_average_list")
     df = pd.DataFrame(day_candle_vs_average_list, columns=["token"])
-    df.to_csv('resources/token.csv', index=False)
+    df.to_csv('resources/token_versus_mean.csv', index=False)
