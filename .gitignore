@@ -169,3 +169,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+resources/eth_hist_data.csv
+resources/token.csv
+resources/token_versus_mean.csv
+resources/token_versus_mode.csv
