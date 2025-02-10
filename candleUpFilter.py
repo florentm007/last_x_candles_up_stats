@@ -1,5 +1,11 @@
 import sys, os
 import pandas as pd
+import statistics
+from loguru import logger
+
+# setting up log level
+logger.remove()
+logger.add(sink=sys.stdout, level="INFO")
 
 
 def full_values_from_one_column(csv_file, column):
@@ -43,9 +49,22 @@ def build_up_csv_for_filter(column_values):
 
             last_five_candles_up.append(counter)
 
-    print(last_five_candles_up)
+    logger.debug("last_five_candles_up is [ " + ', '.join( str(x) for x in last_five_candles_up ) + ' ]')
 
     return last_five_candles_up
+
+def is_day_candle_better_over_avg(last_five_candles_up_list):
+    """
+    For all element in the list, if element > average then the score is 1, otherwise 0
+
+    :param last_five_candles_up_list: a list of last 5 candles up per day
+    :return: a list of 0 & 1 values, 1 meaning the last 5 candles are above the average, 0 otherwise
+    """
+    average = statistics.mean(last_five_candles_up_list)
+    logger.debug("Average of the list of 5 candles up per day is " + str(average) )
+
+    last_five_candles_up_list[:] = [ 1 if i > average else 0 for i in last_five_candles_up_list ]
+    logger.info("list of 0 & 1 values is : [ " + ', '.join( str(x) for x in last_five_candles_up_list ) + ' ]')
 
 
 if __name__ == '__main__':
@@ -57,4 +76,5 @@ if __name__ == '__main__':
     column_name = str(sys.argv[2])
 
     values = full_values_from_one_column(file_name, column_name)
-    build_up_csv_for_filter(values)
+    candles_up = build_up_csv_for_filter(values)
+    is_day_candle_better_over_avg(candles_up)
