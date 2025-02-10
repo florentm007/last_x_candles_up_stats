@@ -66,6 +66,8 @@ def is_day_candle_better_over_avg(last_five_candles_up_list):
     last_five_candles_up_list[:] = [ 1 if i > average else 0 for i in last_five_candles_up_list ]
     logger.info("list of 0 & 1 values is : [ " + ', '.join( str(x) for x in last_five_candles_up_list ) + ' ]')
 
+    return last_five_candles_up_list
+
 
 if __name__ == '__main__':
     ''' first arg is the fileName, ex : "resources/eth_csv.csv"
@@ -77,4 +79,9 @@ if __name__ == '__main__':
 
     values = full_values_from_one_column(file_name, column_name)
     candles_up = build_up_csv_for_filter(values)
-    is_day_candle_better_over_avg(candles_up)
+    day_candle_vs_average_list = is_day_candle_better_over_avg(candles_up)
+
+    #generating the csv file
+    logger.info("Creating resources/token.csv file with day_candle_vs_average_list")
+    df = pd.DataFrame(day_candle_vs_average_list, columns=["token"])
+    df.to_csv('resources/token.csv', index=False)
