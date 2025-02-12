@@ -27,10 +27,14 @@ def build_up_csv_for_filter(column_values):
     :param column_values: the ROC of candles
     :return:
     """
+    reordered_list = column_values.to_list()
+    reordered_list.reverse()
 
     candles_list = []
-    for i in range(0, len(column_values) -1):
-        candles_list.append(column_values[i + 1] - column_values[i])
+    for i in range(0, len(reordered_list) -1):
+        candles_list.append(reordered_list[i + 1] - reordered_list[i])
+    logger.debug("list_to_use is [ " + ', '.join(str(x) for x in reordered_list) + ' ]')
+    logger.debug("candles_list is [ " + ', '.join(str(x) for x in candles_list) + ' ]')
 
     last_five_candles_up = []
     for i in range(0, len(candles_list) +1 ):
